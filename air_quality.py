@@ -123,13 +123,18 @@ for i in aqiTable.keys():
 #calculate AQI of each rows
 for x in df.index:
     aqi = 0
+    keyx = ""
     for k in aqiTable.keys():
+        tmp = aqi
         pos = 0
         for i in range(0,7):
             if df.loc[x,k] >= aqiTable[k]['Cmin'][i]:
                 pos = i
         aqi = max(aqi, (df.loc[x,k] - aqiTable[k]['Cmin'][pos])*(aqiTable[k]['Imax'][pos] - aqiTable[k]['Imin'][pos])/(aqiTable[k]['Cmax'][pos] - aqiTable[k]['Cmin'][pos]) + aqiTable[k]['Imin'][pos])
+        if(aqi>tmp):
+          keyx = k
     df.loc[x,'AQI'] = aqi
+    df.loc[x,'Dominent pollutant'] = keyx
 
 #---------------------------visually represent data---------------------------------
 aqiLevels = [0,50,100,150,200,300,400,500]
@@ -213,3 +218,5 @@ plt.savefig("AQI follow by hour.png")
 plt.show()
 
 #---------------------save clean data----------------------
+
+df.to_csv('AQI_output.csv',index=False)
