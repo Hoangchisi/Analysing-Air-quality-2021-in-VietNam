@@ -112,13 +112,13 @@ aqiTable = {
 }
 
 for i in aqiTable.keys():
-  if i != 'PM10' and i != 'PM2.5':
-    if i!= 'NO2' and i != 'SO2': 
-        aqiTable[i]['Cmin'] = convert_aqi(aqiTable[i]['Cmin'],1)
-        aqiTable[i]['Cmax'] = convert_aqi(aqiTable[i]['Cmax'],1)
-    else:
-        aqiTable[i]['Cmin'] = convert_aqi(aqiTable[i]['Cmin'],10**(-3))
-        aqiTable[i]['Cmax'] = convert_aqi(aqiTable[i]['Cmax'],10**(-3))
+    if i != 'PM10' and i != 'PM2.5':
+        if i!= 'NO2' and i != 'SO2': 
+            aqiTable[i]['Cmin'] = convert_aqi(aqiTable[i]['Cmin'],1)
+            aqiTable[i]['Cmax'] = convert_aqi(aqiTable[i]['Cmax'],1)
+        else:
+            aqiTable[i]['Cmin'] = convert_aqi(aqiTable[i]['Cmin'],10**(-3))
+            aqiTable[i]['Cmax'] = convert_aqi(aqiTable[i]['Cmax'],10**(-3))
 
 #calculate AQI of each rows
 for x in df.index:
@@ -137,7 +137,7 @@ aqiLevels = [0,50,100,150,200,300,400,500]
 #AQI's distribution of VietNam in 2021
 xlist = np.array(df['AQI'])
 plt.figure(figsize = (12,6))
-sns.histplot(xlist, bins = aqiLevels, edgecolor = 'black',kde = True)
+sns.histplot(xlist, bins = aqiLevels, edgecolor = 'black',kde = True,)
 
 plt.xlabel('AQI')
 plt.ylabel('Frequency')
@@ -179,6 +179,7 @@ plt.title("AQI's distribution follow by month")
 for index in range(1,12):
    plt.annotate(f'{round(aqi_month[index],0)}\n', xy=(index, aqi_month[index]), ha='center', va='center')
 plt.savefig("AQI follow by month.png")
+
 #AQI follow by day
 plt.figure(figsize=(12,6))
 
@@ -210,6 +211,29 @@ for index in range(0,24):
    plt.annotate(f'{round(aqi_hour[index],0)}\n', xy=(index, aqi_hour[index]), ha='center', va='center')
 plt.savefig("AQI follow by hour.png")
 
-plt.show()
+#AQI follow dew, humidity,....
+plt.figure(figsize=(12,6))
 
-#---------------------save clean data----------------------
+plt.subplot(2,2,1) 
+plt.scatter(np.array(df['Dew']), np.array(df['AQI']), s = 20, alpha=0.3)
+plt.xlabel('Dew')
+plt.ylabel('AQI')
+
+plt.subplot(2,2,2) 
+plt.scatter(np.array(df['Humidity']), np.array(df['AQI']), s = 20, alpha=0.3)
+plt.xlabel('Humidity')
+plt.ylabel('AQI')
+
+plt.subplot(2,2,3) 
+plt.scatter(np.array(df['Pressure']), np.array(df['AQI']), s = 20, alpha=0.3)
+plt.xlabel('Pressure')
+plt.ylabel('AQI')
+
+plt.subplot(2,2,4) 
+plt.scatter(np.array(df['Temperature']), np.array(df['AQI']), s = 20, alpha=0.3)
+plt.xlabel('Temperature')
+plt.ylabel('AQI')
+
+plt.savefig("AQI follow by other pollutant.png")
+#show all images
+plt.show()
