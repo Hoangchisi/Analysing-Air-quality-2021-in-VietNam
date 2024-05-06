@@ -123,13 +123,18 @@ for i in aqiTable.keys():
 #calculate AQI of each rows
 for x in df.index:
     aqi = 0
+    keyx = ''
     for k in aqiTable.keys():
         pos = 0
+        tmp = aqi
         for i in range(0,7):
             if df.loc[x,k] >= aqiTable[k]['Cmin'][i]:
                 pos = i
         aqi = max(aqi, (df.loc[x,k] - aqiTable[k]['Cmin'][pos])*(aqiTable[k]['Imax'][pos] - aqiTable[k]['Imin'][pos])/(aqiTable[k]['Cmax'][pos] - aqiTable[k]['Cmin'][pos]) + aqiTable[k]['Imin'][pos])
+        if aqi>tmp: 
+          keyx = k
     df.loc[x,'AQI'] = aqi
+    df.loc[x,'Dominent pollutant'] = keyx
 
 #---------------------------visually represent data---------------------------------
 aqiLevels = [0,50,100,150,200,300,400,500]
@@ -233,7 +238,10 @@ plt.subplot(2,2,4)
 plt.scatter(np.array(df['Temperature']), np.array(df['AQI']), s = 20, alpha=0.3)
 plt.xlabel('Temperature')
 plt.ylabel('AQI')
-
+s
 plt.savefig("AQI follow by other pollutant.png")
 #show all images
 plt.show()
+
+#-------------------------- save file ------------------------
+df.to_csv('AQI_output.csv',index=False)
