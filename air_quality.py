@@ -238,7 +238,7 @@ plt.subplot(2,2,4)
 plt.scatter(np.array(df['Temperature']), np.array(df['AQI']), s = 20, alpha=0.3)
 plt.xlabel('Temperature')
 plt.ylabel('AQI')
-s
+
 plt.savefig("AQI follow by other pollutant.png")
 #show all images
 plt.show()
